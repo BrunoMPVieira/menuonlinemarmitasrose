@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Online - Marmitas Rose</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FF5722;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .logo {
+            max-width: 200px;
+            margin: 1rem auto;
+        }
+
+        .menu-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .item-name {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .item-price {
+            font-size: 1.25rem;
+            color: rgb(6, 209, 6);
+            font-weight: bold;
+        }
+
+        .custom-order {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .custom-order i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://i.imgur.com/cpKsP0J.png" alt="Rose Marmitas Logo" class="logo">
+        <h1>MARMITAS CONGELADAS</h1>
+    </header>
+
+    <div class="menu-container">
+        <div class="menu-grid" id="menuGrid"></div>
+        
+        <div class="custom-order" onclick="sendCustomOrder()">
+            <i class="fas fa-utensils"></i>
+            <h2>MARMITA PERSONALIZADA</h2>
+            <p>Clique aqui para personalizar sua marmita!</p>
+        </div>
+    </div>
+
+    <script>
+        const menuItems = [
+            { name: '🧆 Almôndega de carne', price: 19.00, icon: '' },
+            { name: '🍗 Almôndega de frango', price: 18.00, icon: '' },
+            { name: '🥩 Carne moída', price: 19.00, icon: '' },
+            { name: '🥩 Bife', price: 20.00, icon: '' },
+            { name: '🍗 Filé de frango', price: 18.00, icon: '' },
+            { name: '🐟 Salmão grelhado', price: 25.00, icon: '' },
+            { name: '🐟 Filé de tilápia', price: 23.00, icon: '' },
+            { name: '🍗 Frango ao molho', price: 19.00, icon: '' },
+            { name: '🥘 Kibe de forno', price: 22.00, icon: '' },
+            { name: '🌭 Linguiça assada', price: 17.00, icon: '' },
+            { name: '🥩 Lombo grelhado', price: 17.00, icon: '' },
+            { name: '🥞 Panqueca de frango', price: 18.00, icon: '' },
+            { name: '🥞 Panqueca de carne', price: 20.00, icon: '' },
+            { name: '🧀 Parmegiana', price: 20.00, icon: '' },
+            { name: '🥩 Picadinho', price: 20.00, icon: '' },
+            { name: '🍲 Strogonoff de frango', price: 18.00, icon: '' },
+            { name: '🍲 Strogonoff de carne', price: 20.00, icon: '' },
+            { name: '🍝 Lasanha de carne', price: 20.00, icon: '' },
+            { name: '🍝 Lasanha de frango', price: 20.00, icon: '' },
+            { name: '🍝 Nhoque', price: 20.00, icon: '' },
+            { name: '🥧 Quiche', price: 20.00, icon: '' },
+            { name: '🥧 Torta de frango', price: 20.00, icon: '' },
+            { name: '🍝 Macarrão integral', price: 18.00, icon: '' },
+        ];
+
+        function createMenuItems() {
+            const menuGrid = document.getElementById('menuGrid');
+            menuItems.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.innerHTML = `
+                    <i class="fas ${item.icon}"></i>
+                    <h3 class="item-name">${item.name}</h3>
+                    <p class="item-price">R$ ${item.price.toFixed(2)}</p>
+                `;
+                menuItem.onclick = () => sendWhatsApp(item.name);
+                menuGrid.appendChild(menuItem);
+            });
+        }
+
+        function sendWhatsApp(itemName) {
+            const phone = "11984270150";
+            const message = `Olá, estou interessado na marmita congelada da rose ${itemName}`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+        }
+
+        function sendCustomOrder() {
+            const phone = "11984270150";
+            const message = "Olá, estou interessado na marmita congelada personalizável da rose... Posso mandar um áudio explicando?! !!!";
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+        }
+
+        createMenuItems();
+    </script>
+</body>
+</html>
